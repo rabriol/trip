@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🗺️ Roteiro: Sacramento → LA → Las Vegas</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary: #1a1a2e;
+      --accent: #e94560;
+      --gold: #f5a623;
+      --teal: #0f9b8e;
+      --blue: #2563eb;
+      --bg: #f4f6fb;
+      --card: #ffffff;
+      --text: #1e293b;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --shadow: 0 2px 12px rgba(0,0,0,0.08);
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* HEADER */
+    .hero {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      color: white;
+      padding: 40px 20px 32px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .hero-emoji { font-size: 48px; display: block; margin-bottom: 12px; }
+    .hero h1 { font-size: 24px; font-weight: 800; letter-spacing: -0.5px; line-height: 1.2; margin-bottom: 8px; }
+    .hero p { font-size: 14px; color: rgba(255,255,255,0.7); margin-bottom: 20px; }
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .stat-pill {
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    /* NAV TABS */
+    .nav-tabs {
+      display: flex;
+      overflow-x: auto;
+      justify-content: center;
+      background: white;
+      border-bottom: 2px solid var(--border);
+      scrollbar-width: none;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .nav-tabs::-webkit-scrollbar { display: none; }
+    .tab-btn {
+      flex-shrink: 0;
+      padding: 12px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .tab-btn.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+
+    /* CONTENT */
+    .container { max-width: 600px; margin: 0 auto; padding: 0; }
+    .day-section { display: none; padding: 16px; }
+    .day-section.active { display: block; }
+
+    /* DAY HEADER */
+    .day-header {
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 16px;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+    .day-header::after {
+      content: attr(data-emoji);
+      position: absolute;
+      right: 16px;
+      bottom: -8px;
+      font-size: 64px;
+      opacity: 0.2;
+    }
+    .day-header h2 { font-size: 20px; font-weight: 800; }
+    .day-header .date { font-size: 13px; opacity: 0.85; margin-top: 2px; }
+    .day-header .summary { font-size: 13px; margin-top: 8px; opacity: 0.9; }
+
+    .bg-night { background: linear-gradient(135deg, #0f0c29, #302b63); }
+    .bg-road  { background: linear-gradient(135deg, #11998e, #38ef7d); }
+    .bg-park  { background: linear-gradient(135deg, #f953c6, #b91d73); }
+    .bg-univ  { background: linear-gradient(135deg, #f7971e, #ffd200); }
+    .bg-beach { background: linear-gradient(135deg, #0575e6, #021b79); }
+    .bg-vegas { background: linear-gradient(135deg, #f7797d, #fbd786); }
+    .bg-grand { background: linear-gradient(135deg, #c94b4b, #4b134f); }
+    .bg-home  { background: linear-gradient(135deg, #4ca1af, #c4e0e5); }
+
+    /* STOPS */
+    .stop {
+      background: var(--card);
+      border-radius: 14px;
+      margin-bottom: 12px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .stop-header {
+      padding: 14px 16px 12px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .stop-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+    .stop-info { flex: 1; min-width: 0; }
+    .stop-name { font-size: 15px; font-weight: 700; color: var(--text); }
+    .stop-location { font-size: 12px; color: var(--muted); margin-top: 1px; }
+    .stop-time-badge {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+      background: #f1f5f9;
+      color: var(--muted);
+      flex-shrink: 0;
+      white-space: nowrap;
+    }
+
+    /* MAP LINK */
+    .map-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      font-size: 11px;
+      color: #2563eb;
+      text-decoration: none;
+      font-weight: 600;
+      margin-top: 4px;
+    }
+    .map-link:hover { text-decoration: underline; }
+
+    .stop-body { padding: 0 16px 14px; }
+    .stop-body p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px;
+    }
+    .tag {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 9px;
+      border-radius: 20px;
+    }
+    .tag-green  { background: #dcfce7; color: #15803d; }
+    .tag-blue   { background: #dbeafe; color: #1d4ed8; }
+    .tag-orange { background: #ffedd5; color: #c2410c; }
+    .tag-pink   { background: #fce7f3; color: #9d174d; }
+    .tag-purple { background: #ede9fe; color: #7c3aed; }
+    .tag-yellow { background: #fef9c3; color: #a16207; }
+    .tag-red    { background: #fee2e2; color: #b91c1c; }
+
+    /* DRIVE CONNECTOR */
+    .drive-connector {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 16px;
+      margin-bottom: 8px;
+    }
+    .drive-line {
+      width: 2px;
+      height: 32px;
+      background: repeating-linear-gradient(to bottom, var(--border) 0, var(--border) 4px, transparent 4px, transparent 8px);
+      flex-shrink: 0;
+      margin-left: 21px;
+    }
+    .drive-info {
+      font-size: 12px;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .drive-badge {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--muted);
+    }
+
+    /* HOTEL CARD */
+    .hotel-card {
+      background: linear-gradient(135deg, #1e3a5f, #2d5a8e);
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 12px;
+      color: white;
+    }
+    .hotel-card h3 { font-size: 14px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+    .hotel-name { font-size: 15px; font-weight: 800; margin: 6px 0 4px; }
+    .hotel-details { font-size: 12px; opacity: 0.8; display: flex; flex-wrap: wrap; gap: 12px; }
+    .hotel-map-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      font-size: 11px;
+      color: #93c5fd;
+      text-decoration: none;
+      font-weight: 600;
+      margin-top: 8px;
+    }
+    .hotel-map-link:hover { text-decoration: underline; }
+
+    /* TIPS */
+    .tips-card {
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-radius: 14px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+    }
+    .tips-card h4 { font-size: 13px; font-weight: 700; color: #92400e; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+    .tips-card ul { padding-left: 0; list-style: none; }
+    .tips-card li { font-size: 12px; color: #78350f; padding: 3px 0; padding-left: 16px; position: relative; line-height: 1.5; }
+    .tips-card li::before { content: '→'; position: absolute; left: 0; color: #d97706; font-weight: 700; }
+
+    /* VEGAN BADGE */
+    .veg-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: #dcfce7;
+      color: #15803d;
+      border: 1px solid #86efac;
+      border-radius: 20px;
+      padding: 3px 10px;
+      font-size: 11px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    /* HIGHLIGHTS */
+    .highlights {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .highlight-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      text-align: center;
+      box-shadow: var(--shadow);
+    }
+    .highlight-item .emoji { font-size: 24px; display: block; margin-bottom: 4px; }
+    .highlight-item .label { font-size: 11px; font-weight: 600; color: var(--muted); }
+    .highlight-item .value { font-size: 13px; font-weight: 700; color: var(--text); }
+
+    /* OVERVIEW */
+    .overview-timeline {
+      background: var(--card);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      margin-bottom: 12px;
+    }
+    .timeline-item {
+      display: flex;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .timeline-item:last-child { border-bottom: none; }
+    .timeline-dot {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .timeline-content { flex: 1; }
+    .timeline-date { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+    .timeline-title { font-size: 14px; font-weight: 700; color: var(--text); margin: 2px 0; }
+    .timeline-desc { font-size: 12px; color: var(--muted); line-height: 1.4; }
+
+    /* FOOTER */
+    .footer {
+      text-align: center;
+      padding: 24px 16px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    @media (max-width: 360px) {
+      .hero h1 { font-size: 20px; }
+      .highlights { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="hero">
+  <span class="hero-emoji">🚗</span>
+  <h1>Sacramento → LA → Las Vegas</h1>
+  <p>Jun 13 – 19, 2026 · Roteiro completo 🌱 Vegetariano</p>
+  <div class="hero-stats">
+    <span class="stat-pill">📅 7 dias</span>
+    <span class="stat-pill">🏙️ 3 estados</span>
+    <span class="stat-pill">🎢 3 parques</span>
+    <span class="stat-pill">🏖️ 2 praias</span>
+    <span class="stat-pill">🌱 100% vegetariano</span>
+  </div>
+</div>
+
+<nav class="nav-tabs">
+  <button class="tab-btn active" onclick="showTab('overview')">📋 Visão Geral</button>
+  <button class="tab-btn" onclick="showTab('day0')">Sáb 13</button>
+  <button class="tab-btn" onclick="showTab('day1')">Dom 14</button>
+  <button class="tab-btn" onclick="showTab('day2')">Seg 15</button>
+  <button class="tab-btn" onclick="showTab('day3')">Ter 16</button>
+  <button class="tab-btn" onclick="showTab('day4')">Qua 17</button>
+  <button class="tab-btn" onclick="showTab('day5')">Qui 18</button>
+  <button class="tab-btn" onclick="showTab('day6')">Sex 19</button>
+</nav>
+
+<div class="container">
+
+  <!-- ============================================================ OVERVIEW -->
+  <div id="overview" class="day-section active">
+    <div class="highlights">
+      <div class="highlight-item">
+        <span class="emoji">🛣️</span>
+        <div class="value">~2.400 mi</div>
+        <div class="label">km no carro</div>
+      </div>
+      <div class="highlight-item">
+        <span class="emoji">⏱️</span>
+        <div class="value">~26h</div>
+        <div class="label">tempo dirigindo</div>
+      </div>
+      <div class="highlight-item">
+        <span class="emoji">🎢</span>
+        <div class="value">Knott's · Universal · Vegas</div>
+        <div class="label">atrações</div>
+      </div>
+      <div class="highlight-item">
+        <span class="emoji">🌅</span>
+        <div class="value">Grand Canyon West</div>
+        <div class="label">destaque da trip</div>
+      </div>
+    </div>
+
+    <div class="overview-timeline">
+      <div class="timeline-item">
+        <div class="timeline-dot" style="background:#e8f5e9;">🚗</div>
+        <div class="timeline-content">
+          <div class="timeline-date">Sábado, 13 Jun</div>
+          <div class="timeline-title">Pegar carro – Sacramento Airport</div>
+          <div class="timeline-desc">Retirada às 21h30. Descanso antes da grande viagem.</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot" style="background:#fce4ec;">🎢</div>
+        <div class="timeline-content">
+          <div class="timeline-date">Domingo, 14 Jun</div>
+          <div class="timeline-title">Sacramento → Los Angeles → Knott's Berry Farm</div>
+          <div class="timeline-desc">Saída às 4h. Knott's Berry Farm no domingo. Check-in hotel em Burbank.</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot" style="background:#fff3e0;">🎬</div>
+        <div class="timeline-content">
+          <div class="timeline-date">Segunda, 15 Jun</div>
+          <div class="timeline-title">Universal Studios Hollywood</div>
+          <div class="timeline-desc">Dia inteiro no parque. Noite em Burbank.</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot" style="background:#e3f2fd;">🌊</div>
+        <div class="timeline-content">
+          <div class="timeline-date">Terça, 16 Jun</div>
+          <div class="timeline-title">Praias + Viagem a Las Vegas</div>
+          <div class="timeline-desc">Huntington Beach, Laguna Beach e check-in Las Vegas à noite.</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot" style="background:#fce4ec;">🎰</div>
+        <div class="timeline-content">
+          <div class="timeline-date">Quarta, 17 Jun</div>
+          <div class="timeline-title">Las Vegas – The Strip & Fremont Street</div>
+          <div class="timeline-desc">Dia livre para explorar a cidade das luzes.</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot" style="background:#ede7f6;">🏜️</div>
+        <div class="timeline-content">
+          <div class="timeline-date">Quinta, 18 Jun</div>
+          <div class="timeline-title">Hoover Dam → Grand Canyon Caverns → Grand Canyon West</div>
+          <div class="timeline-desc">Saída às 6h. 3 atrações em sequência. Grand Canyon West por último.</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot" style="background:#e0f7fa;">🏠</div>
+        <div class="timeline-content">
+          <div class="timeline-date">Sexta, 19 Jun</div>
+          <div class="timeline-title">Las Vegas → Sacramento</div>
+          <div class="timeline-desc">Check-out às 10h. ~9h de viagem de volta.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tips-card">
+      <h4>⚡ Dicas Gerais</h4>
+      <ul>
+        <li>Baixe o Google Maps offline para áreas sem sinal (Grand Canyon).</li>
+        <li>Compre ingressos dos parques com antecedência — filas menores e preço melhor.</li>
+        <li>Gasolina: abasteça antes de sair de Las Vegas para o Grand Canyon, postos escassos.</li>
+        <li>California tem pedágio nas pontes — tenha FasTrak ou dinheiro.</li>
+        <li>Protetor solar e água em abundância para o Grand Canyon.</li>
+        <li>Vegas: o estacionamento no Strip costuma ser cobrado — pesquise o hotel.</li>
+        <li>🌱 Dica vegetariana: use o app <strong>HappyCow</strong> para encontrar restaurantes vegetarianos/veganos em qualquer cidade!</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ============================================================ DIA 0 - SÁBADO -->
+  <div id="day0" class="day-section">
+    <div class="day-header bg-night" data-emoji="🌙">
+      <h2>Sábado, 13 de Junho</h2>
+      <div class="date">Dia 0 – Pegar o carro</div>
+      <div class="summary">Retirada do carro alugado no Aeroporto de Sacramento (SMF) às 21h30.</div>
+    </div>
+
+    <div class="stop">
+      <div class="stop-header">
+        <div class="stop-icon" style="background:#e8f5e9;">✈️</div>
+        <div class="stop-info">
+          <div class="stop-name">Sacramento International Airport (SMF)</div>
+          <div class="stop-location">Sacramento, CA</div>
+          <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=Sacramento+International+Airport+SMF" target="_blank">📍 Ver no Google Maps</a>
+        </div>
+        <div class="stop-time-badge">21h30</div>
+      </div>
+      <div class="stop-body">
+        <p>Retire o carro alugado no balcão da locadora dentro do terminal ou na área de aluguel. Confirme o estado do veículo e fotografe antes de sair.</p>
+        <div class="tags">
+          <span class="tag tag-blue">Retirada do carro</span>
+          <span class="tag tag-green">Saída às ~4h do dia seguinte</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tips-card">
+      <h4>💤 Dica da noite</h4>
+      <ul>
+        <li>Durma o máximo possível — você vai acordar às ~3h para sair às 4h.</li>
+        <li>Prepare as malas, snacks vegetarianos e água gelada antes de dormir.</li>
+        <li>Configure a rota para Knott's Berry Farm no GPS antes de partir.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ============================================================ DIA 1 - DOMINGO -->
+  <div id="day1" class="day-section">
+    <div class="day-header bg-road" data-emoji="🎢">
+      <h2>Domingo, 14 de Junho</h2>
+      <div class="date">Dia 1 – The Road to LA + Knott's Berry Farm</div>
+      <div class="summary">~6h de estrada + dia inteiro no parque!</div>
+    </div>
+
+    <div class="stop">
+      <div class="stop-header">
+        <div class="stop-icon" style="background:#f0fdf4;">🌙</div>
+        <div class="stop-info">
+          <div class="stop-name">Saída de Sacramento</div>
+          <div class="stop-location">Sacramento → Los Angeles via I-5 S</div>
+          <a class="map-link" href="https://www.google.com/maps/dir/Sacramento,CA/Buena+Park,CA" target="_blank">📍 Ver rota no Google Maps</a>
+        </div>
+        <div class="stop-time-badge">~04h00</div>
+      </div>
+      <div class="stop-body">
+        <p>Partida na madrugada para pegar a I-5 South com trânsito zero. A rota é simples: I-5 S direto até o complexo de LA (~380 mi / ~6h sem paradas).</p>
+        <div class="tags">
+          <span class="tag tag-orange">380 mi / 612 km</span>
+          <span class="tag tag-blue">~6h de viagem</span>
+          <span class="tag tag-green">I-5 South</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="drive-connector">
+      <div class="drive-line"></div>
+      <div class="drive-badge">🛣️ 6h direto até Buena Park</div>
+    </div>
+
+    <div class="stop">
+      <div class="stop-header">
+        <div class="stop-icon" style="background:#fce7f3;">🎢</div>
+        <div class="stop-info">
+          <div class="stop-name">Knott's Berry Farm</div>
+          <div class="stop-location">8039 Beach Blvd, Buena Park, CA</div>
+          <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=Knotts+Berry+Farm+8039+Beach+Blvd+Buena+Park+CA" target="_blank">📍 Ver no Google Maps</a>
+        </div>
+        <div class="stop-time-badge">10h – 20h</div>
+      </div>
+      <div class="stop-body">
+        <p>Um dos parques temáticos mais antigos dos EUA! Atrações de tirar o fôlego com fila menor que a Disney. Perfeito para quem gosta de montanha-russa.</p>
+        <div class="tags">
+          <span class="tag tag-pink">Ghost Rider 🎢</span>
+          <span class="tag tag-pink">HangTime</span>
+          <span class="tag tag-pink">Xcelerator</span>
+          <span class="tag tag-blue">Silver Bullet</span>
+          <span class="tag tag-green">~$65-85/pessoa</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="drive-connector">
+      <div class="drive-line"></div>
+      <div class="drive-badge">🛣️ ~45 min de Buena Park → Burbank</div>
+    </div>
+
+    <div class="hotel-card">
+      <h3>🏨 Check-in Hotel</h3>
+      <div class="hotel-name">Courtyard Los Angeles Burbank Airport</div>
+      <div class="hotel-details">
+        <span>📍 Burbank, CA</span>
+        <span>🛎️ Check-in: a partir das 16h</span>
+        <span>🛏️ Check-out: 16 Jun</span>
+      </div>
+      <a class="hotel-map-link" href="https://www.google.com/maps/search/?api=1&query=Courtyard+Los+Angeles+Burbank+Airport" target="_blank">📍 Ver no Google Maps</a>
+    </div>
+
+    <div class="tips-card">
+      <h4>🌱 Opções Vegetarianas no Knott's</h4>
+      <ul>
+        <li>Pare em Stockton ou Bakersfield para descanso — há muitos postos e fast foods na I-5.</li>
+        <li>O parque abre às 10h. Chegue cedo para as filas menores.</li>
+        <li>Knott's tem várias opções vegetarianas: pizza, funnel cake, pretzels, sorvete e waffles.</li>
+        <li><strong>Ghost Town Grill</strong> e <strong>Wilderness Broiler</strong> têm opções vegetarianas como mac & cheese e saladas.</li>
+        <li>Compre ingresso online com antecedência (economiza tempo e $$$).</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ============================================================ DIA 2 - SEGUNDA -->
+  <div id="day2" class="day-section">
+    <div class="day-header bg-univ" data-emoji="🎬">
+      <h2>Segunda, 15 de Junho</h2>
+      <div class="date">Dia 2 – Universal Studios Hollywood</div>
+      <div class="summary">Dia inteiro mergulhado no mundo do cinema!</div>
+    </div>
+
+    <div class="stop">
+      <div class="stop-header">
+        <div class="stop-icon" style="background:#fff7ed;">☕</div>
+        <div class="stop-info">
+          <div class="stop-name">Porto's Bakery – Café da Manhã</div>
+          <div class="stop-location">3614 W Magnolia Blvd, Burbank, CA</div>
+          <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=Porto%27s+Bakery+Burbank+CA" target="_blank">📍 Ver no Google Maps</a>
+        </div>
+        <div class="stop-time-badge">08h00</div>
+      </div>
+      <div class="stop-body">
+        <div class="veg-badge">🌱 Ótimo para vegetarianos</div>
+        <p>Padaria cubana famosa com muitas opções vegetarianas: <strong>Cheese Roll</strong> (pão de queijo cubano), <strong>Guava & Cheese Strudel</strong>, <strong>Refugiado</strong> (sanduíche de queijo), croissants e bolos. Fila rápida — vale muito!</p>
+        <div class="tags">
+          <span class="tag tag-yellow">Cheese Roll 🧀</span>
+          <span class="tag tag-yellow">Guava & Cheese Strudel</span>
+          <span class="tag tag-green">Lacto-vegetariano ✓</span>
+          <span class="tag tag-orange">~$8-12/pessoa</span>
+          <span class="tag tag-blue">~15 min do hotel</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="drive-connector">
+      <div class="drive-line"></div>
+      <div class="drive-badge">🛣️ ~15 min hotel → Universal</div>
+    </div>
+
+    <div class="stop">
+      <div class="stop-header">
+        <div class="stop-icon" style="background:#fef3c7;">🎬</div>
+        <div class="stop-info">
+          <div class="stop-name">Universal Studios Hollywood</div>
+          <div class="stop-location">100 Universal City Plaza, Universal City, CA</div>
+          <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=Universal+Studios+Hollywood+100+Universal+City+Plaza" target="_blank">📍 Ver no Google Maps</a>
+        </div>
+        <div class="stop-time-badge">09h – 21h</div>
+      </div>
+      <div class="stop-body">
+        <p>Dia completo no parque. Vá primeiro para <strong>The Wizarding World of Harry Potter</strong> e <strong>Super Nintendo World</strong> — filas explodem depois das 11h!</p>
+        <div class="tags">
+          <span class="tag tag-yellow">Harry Potter World 🧙</span>
+          <span class="tag tag-yellow">Super Nintendo World 🎮</span>
+          <span class="tag tag-orange">Jurassic World Ride 🦕</span>
+          <span class="tag tag-purple">Transformers 3D</span>
+          <span class="tag tag-blue">Studio Tour 🎥</span>
+          <span class="tag tag-green">~$110-140/pessoa</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hotel-card">
+      <h3>🏨 Dormir em Burbank</h3>
+      <div class="hotel-name">Courtyard Los Angeles Burbank Airport</div>
+      <div class="hotel-details">
+        <span>📍 Burbank, CA</span>
+        <span>🌙 Última noite no hotel</span>
+      </div>
+      <a class="hotel-map-link" href="https://www.google.com/maps/search/?api=1&query=Courtyard+Los+Angeles+Burbank+Airport" target="_blank">📍 Ver no Google Maps</a>
+    </div>
+
+    <div class="tips-card">
+      <h4>🌱 Opções Vegetarianas no Universal</h4>
+      <ul>
+        <li>Universal Express Pass vale muito — elimina a fila nas principais atrações.</li>
+        <li><strong>Butterbeer</strong> no Harry Potter World é vegetariano (sem leite na versão gelada) — obrigatório!</li>
+        <li><strong>Three Broomsticks</strong> (HP World): Great Feast vegetariano, saladas e pumpkin juice 🎃</li>
+        <li><strong>Leaky Cauldron</strong>: opções vegetarianas marcadas no menu.</li>
+        <li><strong>Louie's Italian Restaurant</strong>: pizza margherita e massas sem carne.</li>
+        <li>Prepare-se para se molhar no Jurassic World — leve roupa extra ou compre uma capa.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ============================================================ DIA 3 - TERÇA -->
+  <div id="day3" class="day-section">
+    <div class="day-header bg-beach" data-emoji="🌊">
+      <h2>Terça, 16 de Junho</h2>
+      <div class="date">Dia 3 – Praias → Las Vegas</div>
+      <div class="summary">Manhã no Pacífico, tarde em Laguna Beach, noite na cidade do pecado!</div>
+    </div>
+
+    <div class="stop">
+      <div class="stop-header">
+        <div class="stop-icon" style="background:#eff6ff;">🧳</div>
+        <div class="stop-info">
+          <div class="stop-name">Check-out do Hotel em Burbank</div>
+          <div class="stop-location">Courtyard Burbank Airport</div>
+          <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=Courtyard+Los+Angeles+Burbank+Airport" target="_blank">📍 Ver no Google Maps</a>
+        </div>
+        <div class="stop-time-badge">08h00</div>
+      </div>
+      <div class="stop-body">
+        <p>Check-out até 11h. Deixe as malas no carro e parta para Huntington Beach.</p>
+      </div>
+    </div>
+
+    <div class="drive-connector">
+      <div class="drive-line"></div>
+      <div class="drive-badge">🛣️ ~1h de Burbank → Huntington Beach</div>
+    </div>
+
+    <div class="stop">
+      <div class="stop-header">
+        <div class="stop-icon" style="background:#dbeafe;">🏄</div>
+        <div class="stop-info">
+          <div class="stop-name">Huntington Beach – "Surf City USA"</div>
+          <div class="stop-location">Huntington Beach Pier, CA</div>
+          <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=Huntington+Beach+Pier+California" target="_blank">📍 Ver no Google Maps</a>
+        </div>
+        <div class="stop-time-badge">09h – 12h</div>
+      </div>
+      <div class="stop-body">
+        <p>Praia icônica com ondas perfeitas para surf. Curta a areia, o píer histórico e o calçadão. Ótima para nadar e ver surfistas profissionais.</p>
+        <div class="tags">
+          <span class="tag tag-blue">Huntington Beach Pier 🎣</span>
+          <span class="tag tag-blue">Nadar 🏊</span>
+          <span class="tag tag-green">Calçadão / Boardwalk</span>
+          <span class="tag tag-orange">Main St. para fotos</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="stop">
+      <div class="stop-header">
+        <div class="stop-icon" style="background:#dcfce7;">🍕</div>
+        <div class="stop-info">
+          <div class="stop-name">Almoço Vegetariano em Huntington Beach</div>
+          <div class="stop-location">Seabirds Kitchen – Costa Mesa (10 min de HB)</div>
+          <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=Seabirds+Kitchen+Costa+Mesa+CA" target="_blank">📍 Ver no Google Maps</a>
+        </div>
+        <div class="stop-time-badge">12h – 13h30</div>
+      </div>
+      <div class="stop-body">
+        <div class="veg-badge">🌱 100% vegetariano / vegan</div>
+        <p>O <strong>Seabirds Kitchen</strong> em Costa Mesa é um dos restaurantes vegetarianos mais premiados da Califórnia. Menu criativo com tacos veganos, bowls, pizzas vegetarianas e sobremesas incríveis. Alternativa: <strong>Sugar Shack Café</strong> (HB) com opções vegetarianas no café da manhã estendido.</p>
+        <div class="tags">
+          <span class="tag tag-green">Seabirds Kitchen 🌱</span>
+          <span class="tag tag-green">Sugar Shack Café (HB)</span>
+          <span class="tag tag-orange">Seabirds: ~$18-25/pessoa</span>
+          <span class="tag tag-orange">Sugar Shack: ~$12-18/pessoa</span>
+          <span class="tag tag-blue">~10 min de Huntington Beach</span>
+          <span class="tag tag-purple">Altamente recomendado!</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="drive-connector">
+      <div class="drive-line"></div>
+      <div class="drive-badge">🛣️ ~30 min Huntington → Laguna Beach</div>
+    </div>
+
+    <div class="stop">
+      <div class="stop-header">
+        <div class="stop-icon" style="background:#e0f2fe;">🎨</div>
+        <div class="stop-info">
+          <div class="stop-name">Laguna Beach</div>
+          <div class="stop-location">Main Beach, Laguna Beach, CA</div>
+          <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=Main+Beach+Laguna+Beach+California" target="_blank">📍 Ver no Google Maps</a>
+        </div>
+        <div class="stop-time-badge">14h – 16h</div>
+      </div>
+      <div class="stop-body">
+        <p>Uma das praias mais bonitas da Califórnia, com galerias de arte, lojas charmosas e sorvete. <strong>Main Beach</strong> é o ponto central. Não deixe de ver o pôr do sol das pedras da praia! Sorveterias como <strong>Zogg's Orange Inn</strong> e <strong>Ben & Jerry's</strong> na Main St. têm ótimas opções vegetarianas.</p>
+        <div class="tags">
+          <span class="tag tag-blue">Main Beach 🏖️</span>
+          <span class="tag tag-purple">Galerias de Arte 🎨</span>
+          <span class="tag tag-pink">Sorvete 🍦</span>
+          <span class="tag tag-orange">Crystal Cove State Park</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="drive-connector">
+      <div class="drive-line"></div>
+      <div class="drive-badge">🛣️ ~4h de Laguna Beach → Las Vegas (I-15 N)</div>
+    </div>
+
+    <div class="stop">
+      <div class="stop-header">
+        <div class="stop-icon" style="background:#fdf4ff;">🌆</div>
+        <div class="stop-info">
+          <div class="stop-name">Chegada em Las Vegas</div>
+          <div class="stop-location">Las Vegas, NV</div>
+          <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=Las+Vegas+Strip+Nevada" target="_blank">📍 Ver no Google Maps</a>
+        </div>
+        <div class="stop-time-badge">~20h</div>
+      </div>
+      <div class="stop-body">
+        <p>Passando pela I-15 North, a entrada em Las Vegas de noite já é um espetáculo! Chegada estimada às 20h–21h.</p>
+      </div>
+    </div>
+
+    <div class="hotel-card">
+      <h3>🏨 Check-in Las Vegas</h3>
+      <div class="hotel-name">The Berkley, Las Vegas</div>
+      <div class="hotel-details">
+        <span>📍 Las Vegas, NV</span>
+        <span>🛎️ Check-in: a partir das 16h</span>
+        <span>🛏️ Check-out: 19 Jun</span>
+        <span>🌙 3 noites</span>
+      </div>
+      <a class="hotel-map-link" href="https://www.google.com/maps/search/?api=1&query=The+Berkley+Las+Vegas" target="_blank">📍 Ver no Google Maps</a>
+    </div>
+
+    <div class="tips-card">
+      <h4>💡 Dicas do Dia</h4>
+      <ul>
+        <li>Chegue em Huntington Beach cedo — vaga de estacionamento fica escassa depois das 10h.</li>
+        <li>A I-15 N para Vegas pode ter lentidão na saída de LA — preveja 4h a 5h.</li>
+        <li>Abasteça o carro antes de sair de Laguna — gasolina mais barata na Califórnia que Nevada.</li>
+        <li>Laguna Beach tem estacionamento pago — leve moedas ou use o ParkMobile app.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ============================================================ DIA 4 - QUARTA -->
+  <div id="day4" class="day-section">
+    <div class="day-header bg-vegas" data-emoji="🎰">
+      <h2>Quarta, 17 de Junho</h2>
+      <div class="date">Dia 4 – Las Vegas: The Strip & Fremont Street</div>
+      <div class="summary">Explore a cidade mais deslumbrante do mundo!</div>
+    </div>
+
+    <div class="stop">
+      <div class="stop-header">
+        <div class="stop-icon" style="background:#fff7ed;">🌅</div>
+        <div class="stop-info">
+          <div class="stop-name">Manhã Tranquila</div>
+          <div class="stop-location">Hotel – Café da Manhã</div>
+        </div>
+        <div class="stop-time-badge">09h – 11h</div>
+      </div>
+      <div class="stop-body">
+        <p>Aproveite o hotel e descanse do dia anterior. Vegas não dorme — então aproveite a manhã com calma antes de explorar.</p>
+      </div>
+    </div>
+
+    <div class="stop">
+      <div class="stop-header">
+        <div class="stop-icon" style="background:#fef9c3;">🎰</div>
+        <div class="stop-info">
+          <div class="stop-name">The Strip – Las Vegas Blvd</div>
+          <div class="stop-location">Las Vegas Boulevard South, Las Vegas, NV</div>
+          <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=Las+Vegas+Strip+Las+Vegas+Boulevard+South" target="_blank">📍 Ver no Google Maps</a>
+        </div>
+        <div class="stop-time-badge">11h – 18h</div>
+      </div>
+      <div class="stop-body">
+        <p>O coração de Las Vegas! Passeie pelos hotéis-casinos mais famosos do mundo. Cada hotel é uma atração por si só.</p>
+        <div class="tags">
+          <span class="tag tag-yellow">Bellagio – Fontes 💦</span>
+          <span class="tag tag-yellow">Caesars Palace 🏛️</span>
+          <span class="tag tag-orange">The Venetian 🛶</span>
+          <span class="tag tag-orange">Paris Las Vegas 🗼</span>
+          <span class="tag tag-blue">MGM Grand</span>
+          <span class="tag tag-green">Luxor – pirâmide 🔺</span>
+          <span class="tag tag-purple">New York-New York 🗽</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="stop">
+      <div class="stop-header">
+        <div class="stop-icon" style="background:#f0fdf4;">🍽️</div>
+        <div class="stop-info">
+          <div class="stop-name">Almoço Vegetariano no Strip</div>
+          <div class="stop-location">The Strip, Las Vegas</div>
+          <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=vegetarian+restaurant+Las+Vegas+Strip" target="_blank">📍 Ver restaurantes vegetarianos no Maps</a>
+        </div>
+        <div class="stop-time-badge">13h</div>
+      </div>
+      <div class="stop-body">
+        <div class="veg-badge">🌱 Opções vegetarianas / lacto-veg</div>
+        <p>Vegas surpreende pelos restaurantes vegetarianos! Opções excelentes no Strip e arredores:</p>
+        <div class="tags">
+          <span class="tag tag-green">True Food Kitchen 🌿 – ~$20-28/pessoa</span>
+          <span class="tag tag-green">Esther's Kitchen 🍝 – ~$22-32/pessoa</span>
+          <span class="tag tag-blue">Mon Ami Gabi (Paris LV) – ~$28-45/pessoa</span>
+          <span class="tag tag-purple">The Wynn (veg menu) – ~$35-55/pessoa</span>
+          <span class="tag tag-yellow">Veggie House 🌱 (vegan) – ~$12-18/pessoa</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="stop">
+      <div class="stop-header">
+        <div class="stop-icon" style="background:#fdf4ff;">🌃</div>
+        <div class="stop-info">
+          <div class="stop-name">Jantar Vegetariano</div>
+          <div class="stop-location">Esther's Kitchen ou The Vegenation</div>
+          <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=The+Vegenation+Las+Vegas" target="_blank">📍 The Vegenation no Google Maps</a>
+        </div>
+        <div class="stop-time-badge">19h</div>
+      </div>
+      <div class="stop-body">
+        <div class="veg-badge">🌱 100% vegetariano / vegano</div>
+        <p><strong>The Vegenation</strong> é o restaurante 100% vegano mais famoso de Las Vegas, com menu criativo que agrada qualquer paladar. <strong>Esther's Kitchen</strong> é uma pizzaria italiana com massa fresca e excelentes opções vegetarianas.</p>
+        <div class="tags">
+          <span class="tag tag-green">The Vegenation 🌱 – ~$18-26/pessoa</span>
+          <span class="tag tag-green">Esther's Kitchen 🍕 – ~$22-32/pessoa</span>
+          <span class="tag tag-blue">Reserva recomendada!</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="stop">
+      <div class="stop-header">
+        <div class="stop-icon" style="background:#fce7f3;">✨</div>
+        <div class="stop-info">
+          <div class="stop-name">Fremont Street Experience</div>
+          <div class="stop-location">Fremont Street, Downtown Las Vegas, NV</div>
+          <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=Fremont+Street+Experience+Downtown+Las+Vegas" target="_blank">📍 Ver no Google Maps</a>
+        </div>
+        <div class="stop-time-badge">20h – 23h</div>
+      </div>
+      <div class="stop-body">
+        <p>O teto de LED colossal de 500m que transforma a rua num show de luz e som. Shows de música ao vivo, zip line pela rua e a atmosfera do Vegas clássico dos anos 50.</p>
+        <div class="tags">
+          <span class="tag tag-pink">Show de LED no teto 🌈</span>
+          <span class="tag tag-purple">Zip Line ➰</span>
+          <span class="tag tag-orange">Shows ao vivo 🎸</span>
+          <span class="tag tag-yellow">Golden Nugget Casino</span>
+          <span class="tag tag-blue">~15 min do Strip de Uber</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tips-card">
+      <h4>💡 Dicas de Las Vegas</h4>
+      <ul>
+        <li>Use <strong>Uber/Lyft</strong> para se mover — estacionar no Strip é complicado e pago.</li>
+        <li>As fontes do Bellagio têm show de graça a cada 15-30 minutos — não perca!</li>
+        <li>Explore o interior dos hotéis-cassinos — são de graça e cada um tem um tema incrível.</li>
+        <li>O céu de Las Vegas é quente mesmo em junho — leve água sempre que sair.</li>
+        <li>🌱 Use o app <strong>HappyCow</strong> para encontrar mais opções vegetarianas/veganas em Vegas.</li>
+        <li>Shows de mágica, circo e comédia disponíveis — compre ingresso com antecedência.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ============================================================ DIA 5 - QUINTA -->
+  <div id="day5" class="day-section">
+    <div class="day-header bg-grand" data-emoji="🏜️">
+      <h2>Quinta, 18 de Junho</h2>
+      <div class="date">Dia 5 – Hoover Dam → Grand Canyon Caverns → Grand Canyon West</div>
+      <div class="summary">Dia épico no deserto — 3 maravilhas em sequência!</div>
+    </div>
+
+    <div class="stop">
+      <div class="stop-header">
+        <div class="stop-icon" style="background:#fef2f2;">⏰</div>
+        <div class="stop-info">
+          <div class="stop-name">Saída de Las Vegas</div>
+          <div class="stop-location">Las Vegas → Hoover Dam → Grand Canyon West</div>
+          <a class="map-link" href="https://www.google.com/maps/dir/Las+Vegas,NV/Hoover+Dam,NV/Grand+Canyon+Caverns,AZ/Grand+Canyon+West,AZ" target="_blank">📍 Ver rota completa no Google Maps</a>
+        </div>
+        <div class="stop-time-badge">06h00</div>
+      </div>
+      <div class="stop-body">
+        <p>Saída às 6h — mais cedo que antes porque o dia tem 3 paradas. Na noite anterior: prepare marmita vegetariana para o almoço (wrap, frutas, queijo, castanhas). Rota do dia: US-93 S → AZ-66 (Route 66) → Pierce Ferry Rd.</p>
+        <div class="tags">
+          <span class="tag tag-orange">Dia longo — saia às 6h!</span>
+          <span class="tag tag-blue">US-93 S → AZ-66 → Pierce Ferry Rd</span>
+          <span class="tag tag-red">Abasteça e prepare lanche antes!</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="drive-connector">
+      <div class="drive-line"></div>
+      <div class="drive-badge">🛣️ ~45 min Vegas → Hoover Dam</div>
+    </div>
+
+    <div class="stop">
+      <div class="stop-header">
+        <div class="stop-icon" style="background:#e0f2fe;">🌊</div>
+        <div class="stop-info">
+          <div class="stop-name">Hoover Dam</div>
+          <div class="stop-location">Hoover Dam, Boulder City, NV</div>
+          <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=Hoover+Dam+Boulder+City+Nevada" target="_blank">📍 Ver no Google Maps</a>
+        </div>
+        <div class="stop-time-badge">06h45 – 08h00</div>
+      </div>
+      <div class="stop-body">
+        <p>Uma das maiores obras de engenharia da história americana, construída nos anos 30. Atravesse o <strong>Bypass Bridge</strong> com vista incrível da represa e do Lake Mead ao amanhecer — luz perfeita para fotos! Visita rápida mas muito impactante.</p>
+        <div class="tags">
+          <span class="tag tag-blue">Bypass Bridge 🌉</span>
+          <span class="tag tag-orange">Vista do Lake Mead ao amanhecer 🌅</span>
+          <span class="tag tag-green">Tour interno: ~$15-30/pessoa</span>
+          <span class="tag tag-yellow">Fronteira AZ/NV</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="drive-connector">
+      <div class="drive-line"></div>
+      <div class="drive-badge">🛣️ ~2h30 Hoover Dam → Grand Canyon Caverns (via Kingman/Route 66)</div>
+    </div>
+
+    <div class="stop">
+      <div class="stop-header">
+        <div class="stop-icon" style="background:#ede9fe;">🕳️</div>
+        <div class="stop-info">
+          <div class="stop-name">Grand Canyon Caverns</div>
+          <div class="stop-location">Mile Marker 115, Route 66, Peach Springs, AZ</div>
+          <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=Grand+Canyon+Caverns+Route+66+Peach+Springs+AZ" target="_blank">📍 Ver no Google Maps</a>
+        </div>
+        <div class="stop-time-badge">10h30 – 12h30</div>
+      </div>
+      <div class="stop-body">
+        <p>A maior caverna seca dos EUA, aberta ao público! Um tour subterrâneo de ~45 min desce 21 andares abaixo do chão por elevador — temperatura constante de 13°C mesmo com 40°C lá fora. Formações de cristal, ossos de preguiça gigante pré-histórica e silêncio absoluto. Experiência única e surpreendente!</p>
+        <div class="tags">
+          <span class="tag tag-purple">Tour de 45 min 🪨</span>
+          <span class="tag tag-purple">21 andares abaixo do solo</span>
+          <span class="tag tag-blue">13°C lá dentro — leve agasalho!</span>
+          <span class="tag tag-orange">Ossos de megafauna pré-histórica</span>
+          <span class="tag tag-green">~$25-30/pessoa</span>
+          <span class="tag tag-yellow">Na histórica Route 66 🛣️</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="stop">
+      <div class="stop-header">
+        <div class="stop-icon" style="background:#fff7ed;">🍱</div>
+        <div class="stop-info">
+          <div class="stop-name">Almoço – Grand Canyon Caverns Restaurant</div>
+          <div class="stop-location">Grand Canyon Caverns, Route 66, AZ</div>
+          <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=Grand+Canyon+Caverns+Restaurant+Route+66" target="_blank">📍 Ver no Google Maps</a>
+        </div>
+        <div class="stop-time-badge">12h30 – 13h15</div>
+      </div>
+      <div class="stop-body">
+        <div class="veg-badge">🌱 Leve marmita como backup!</div>
+        <p>O complexo tem um restaurante/snack bar. Menu simples — consulte opções vegetarianas no local. <strong>Recomendado:</strong> leve wrap vegetariano + frutas preparados em Vegas como garantia, já que opções veg são limitadas na região.</p>
+        <div class="tags">
+          <span class="tag tag-yellow">Restaurante no local: ~$12-18/pessoa</span>
+          <span class="tag tag-green">Marmita de Vegas 🥗 (melhor opção)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="drive-connector">
+      <div class="drive-line"></div>
+      <div class="drive-badge">🛣️ ~25 min Grand Canyon Caverns → Grand Canyon West</div>
+    </div>
+
+    <div class="stop">
+      <div class="stop-header">
+        <div class="stop-icon" style="background:#fef3c7;">🏜️</div>
+        <div class="stop-info">
+          <div class="stop-name">Grand Canyon West – Eagle Point & Guano Point</div>
+          <div class="stop-location">Diamond Bar Rd, Peach Springs, AZ (Reserva Hualapai)</div>
+          <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=Grand+Canyon+West+Eagle+Point+Peach+Springs+AZ" target="_blank">📍 Ver no Google Maps</a>
+        </div>
+        <div class="stop-time-badge">13h45 – 17h00</div>
+      </div>
+      <div class="stop-body">
+        <p>O Grand Canyon West sem o Skywalk ainda tem as melhores vistas do complexo. <strong>Eagle Point</strong> é o mirante onde o Skywalk fica — as vistas do cânion ao redor são espetaculares mesmo da beira. <strong>Guano Point</strong> é o ponto mais alto com trilha pelo rim e vista de 360° que muitos dizem ser melhor que o Skywalk. <strong>Hualapai Ranch</strong> fecha o passeio com charme do velho oeste.</p>
+        <div class="tags">
+          <span class="tag tag-orange">Eagle Point – vista do cânion 🦅</span>
+          <span class="tag tag-red">Guano Point – trilha + vista 360° ⭐</span>
+          <span class="tag tag-yellow">Hualapai Ranch – velho oeste 🤠</span>
+          <span class="tag tag-blue">Legacy Package (sem Skywalk): ~$30-45/pessoa</span>
+          <span class="tag tag-green">Ônibus gratuito entre os pontos</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="drive-connector">
+      <div class="drive-line"></div>
+      <div class="drive-badge">🛣️ ~2h30 Grand Canyon West → Las Vegas</div>
+    </div>
+
+    <div class="stop">
+      <div class="stop-header">
+        <div class="stop-icon" style="background:#fce7f3;">🌆</div>
+        <div class="stop-info">
+          <div class="stop-name">Retorno a Las Vegas</div>
+          <div class="stop-location">The Berkley, Las Vegas</div>
+          <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=The+Berkley+Las+Vegas" target="_blank">📍 Ver no Google Maps</a>
+        </div>
+        <div class="stop-time-badge">~19h30</div>
+      </div>
+      <div class="stop-body">
+        <p>Última noite em Vegas! Jantar leve em algum dos restaurantes vegetarianos já conhecidos e descanso antes da longa viagem de volta amanhã.</p>
+      </div>
+    </div>
+
+    <div class="tips-card">
+      <h4>⚠️ Dicas para o Dia</h4>
+      <ul>
+        <li>Leve muita água — no mínimo 2L por pessoa. Calor extremo em junho (+38°C) lá fora e 13°C nas cavernas.</li>
+        <li>🌱 Prepare marmita vegetariana em Vegas na noite anterior — opções são escassas no percurso.</li>
+        <li>Grand Canyon Caverns: leve um agasalho leve — a diferença de temperatura é enorme.</li>
+        <li>Guano Point tem a trilha mais bonita do Grand Canyon West — não pule!</li>
+        <li>O Grand Canyon West é administrado pela Nação Hualapai — diferente do Grand Canyon National Park.</li>
+        <li>Sinal de celular inexistente na área — baixe o Google Maps offline antes de sair.</li>
+        <li>Sapatilha fechada é obrigatória — sem chinelo nas trilhas.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ============================================================ DIA 6 - SEXTA -->
+  <div id="day6" class="day-section">
+    <div class="day-header bg-home" data-emoji="🏠">
+      <h2>Sexta, 19 de Junho</h2>
+      <div class="date">Dia 6 – Volta para Sacramento</div>
+      <div class="summary">Última manhã em Vegas e ~9h de estrada de volta.</div>
+    </div>
+
+    <div class="stop">
+      <div class="stop-header">
+        <div class="stop-icon" style="background:#fefce8;">☕</div>
+        <div class="stop-info">
+          <div class="stop-name">Café da Manhã & Check-out</div>
+          <div class="stop-location">The Berkley, Las Vegas</div>
+          <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=The+Berkley+Las+Vegas" target="_blank">📍 Ver no Google Maps</a>
+        </div>
+        <div class="stop-time-badge">07h30 – 10h</div>
+      </div>
+      <div class="stop-body">
+        <p>Check-out até 10h. Aproveite para um café reforçado antes da longa viagem. Sugestão vegetariana: <strong>Cafe Lola</strong> (menu com ovos, torradas e opções veg) ou o café do próprio hotel. Ideal também preparar snacks para o carro!</p>
+      </div>
+    </div>
+
+    <div class="stop">
+      <div class="stop-header">
+        <div class="stop-icon" style="background:#f0fdf4;">🚗</div>
+        <div class="stop-info">
+          <div class="stop-name">Viagem Vegas → Sacramento</div>
+          <div class="stop-location">I-15 N → CA-58 W → I-5 N</div>
+          <a class="map-link" href="https://www.google.com/maps/dir/Las+Vegas,NV/Sacramento,CA" target="_blank">📍 Ver rota completa no Google Maps</a>
+        </div>
+        <div class="stop-time-badge">10h – 19h</div>
+      </div>
+      <div class="stop-body">
+        <p>Rota mais rápida: I-15 N até Barstow, depois CA-58 W até Bakersfield, e então I-5 N até Sacramento. Alternativa cênica: US-395 N pelo Vale de Owens e Sierra Nevada (mais longa mas linda).</p>
+        <div class="tags">
+          <span class="tag tag-orange">~560 mi / 900 km</span>
+          <span class="tag tag-red">~8-9h de viagem</span>
+          <span class="tag tag-blue">I-15 N → CA-58 W → I-5 N</span>
+          <span class="tag tag-green">Pare em Barstow para almoço</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="stop">
+      <div class="stop-header">
+        <div class="stop-icon" style="background:#f0fdf4;">🥗</div>
+        <div class="stop-info">
+          <div class="stop-name">Parada para Almoço – Barstow</div>
+          <div class="stop-location">Barstow, CA (no caminho)</div>
+          <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=vegetarian+food+Barstow+CA" target="_blank">📍 Ver opções vegetarianas em Barstow</a>
+        </div>
+        <div class="stop-time-badge">13h</div>
+      </div>
+      <div class="stop-body">
+        <div class="veg-badge">🌱 Opções limitadas — prefira levar marmita!</div>
+        <p>Barstow é uma cidade pequena no deserto com opções limitadas para vegetarianos. Melhores apostas: <strong>Chipotle</strong> (burrito bowl vegetariano), <strong>Panda Express</strong> (chow mein vegetariano + tofu) ou <strong>Subway</strong> (sanduíche vegetariano). O ideal é sair de Vegas com um lanche preparado!</p>
+        <div class="tags">
+          <span class="tag tag-green">Chipotle – Bowl veg: ~$10-13/pessoa</span>
+          <span class="tag tag-green">Panda Express – Chow Mein+Tofu: ~$10-13/pessoa</span>
+          <span class="tag tag-yellow">Subway – Veggie Delite: ~$8-10/pessoa</span>
+          <span class="tag tag-blue">Barstow Premium Outlets 🛍️</span>
+          <span class="tag tag-orange">Posto de gasolina</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="stop">
+      <div class="stop-header">
+        <div class="stop-icon" style="background:#e8f5e9;">🏠</div>
+        <div class="stop-info">
+          <div class="stop-name">Chegada em Sacramento</div>
+          <div class="stop-location">Sacramento International Airport (SMF), CA</div>
+          <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=Sacramento+International+Airport" target="_blank">📍 Ver no Google Maps</a>
+        </div>
+        <div class="stop-time-badge">~19h</div>
+      </div>
+      <div class="stop-body">
+        <p>Fim da aventura! Devolver o carro no aeroporto e descansar após uma viagem incrível por Sacramento, Los Angeles, Las Vegas e o Grand Canyon!</p>
+        <div class="tags">
+          <span class="tag tag-green">Devolução do carro no SMF</span>
+          <span class="tag tag-blue">Fim da viagem 🎉</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tips-card">
+      <h4>💡 Dicas para a volta</h4>
+      <ul>
+        <li>Saia o mais cedo possível — 9h é ideal para evitar trânsito ao sair de Vegas.</li>
+        <li>🌱 Prepare lanches vegetarianos para o carro em Vegas: frutas, queijos, pão, castanhas.</li>
+        <li>A CA-58 W pode ter ventos fortes — atenção com rajadas de vento.</li>
+        <li>Alterne motoristas a cada 2-3h para a viagem ficar mais tranquila.</li>
+        <li>Cheque o horário de devolução do carro para evitar cobranças extra.</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  🗺️ Roteiro criado com carinho · Sacramento → LA → Las Vegas · Jun 2026<br>
+  <span style="font-size:11px; margin-top:4px; display:block;">🌱 Roteiro 100% vegetariano / lacto-vegetariano · Todos os tempos de viagem são estimados sem trânsito.</span>
+</div>
+
+<script>
+  function showTab(id) {
+    document.querySelectorAll('.day-section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    event.target.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+
+</body>
+</html>
